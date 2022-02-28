@@ -37,6 +37,9 @@
         background-image: url("res/tetris.png");
         width: 50px;
         height: 50px;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 95%;
     }
     </style>
 </head>
