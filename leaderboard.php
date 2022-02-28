@@ -41,7 +41,7 @@
         <li name="leaderboard" style="float:right"><a class="active" href="/ecm1417_coursework/leaderboard.php">Leaderboard</a></li>
     </ul>
     <div class="main">
-        background-image: url("res/tetris.png");
+        background-image: url("ecm1417_coursework/res/tetris.png");
     </div>
 </body>
 </html>
