@@ -37,9 +37,9 @@
 </head>
 <body>
     <ul>
-        <li name="home"><a class="active" href="/index.php">Home</a></li>
-        <li name="tetris"><a href="/tetris.php">Play Tetris</a></li>
-        <li name="leaderboard"><a href="/leaderboard.php">Leaderboard</a></li>
+        <li name="home"><a class="active" href="/ecm1417_coursework/index.php">Home</a></li>
+        <li name="tetris"><a href="/ecm1417_coursework/tetris.php">Play Tetris</a></li>
+        <li name="leaderboard"><a href="/ecm1417_coursework/leaderboard.php">Leaderboard</a></li>
     </ul>
 </body>
 </html>
