@@ -36,6 +36,8 @@
 
     div.main {
         background-image: url("tetris.png");
+        width: 95%;
+        height: 100%;
     }
     </style>
 </head>
