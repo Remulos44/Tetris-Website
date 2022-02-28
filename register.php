@@ -33,6 +33,10 @@
     .active {
         background-color: #04AA6D;
     }
+
+    div.main {
+        background-image: url("ecm1417_coursework/res/tetris.png");
+    }
     </style>
 </head>
 <body>
@@ -42,7 +46,7 @@
         <li name="leaderboard"><a href="/ecm1417_coursework/leaderboard.php">Leaderboard</a></li>
     </ul>
     <div class="main">
-        background-image: url("ecm1417_coursework/res/tetris.png");
+
     </div>
 </body>
 </html>
