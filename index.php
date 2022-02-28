@@ -8,14 +8,10 @@
         margin: 0;
         padding: 0;
         overflow: hidden;
-        background-color: #333;
+        background-color: blue;
         position: fixed;
         top: 0;
         width: 100%;
-    }
-
-    li {
-        float: left;
     }
 
     li a {
@@ -24,6 +20,9 @@
         text-align: center;
         padding: 14px 16px;
         text-decoration: none;
+        font-family: Arial;
+        font-weight: bold;
+        font-size: 12px;
     }
 
     li a:hover:not(.active) {
@@ -37,9 +36,9 @@
 </head>
 <body>
     <ul>
-        <li name="home"><a class="active" href="/ecm1417_coursework/index.php">Home</a></li>
-        <li name="tetris"><a href="/ecm1417_coursework/tetris.php">Play Tetris</a></li>
-        <li name="leaderboard"><a href="/ecm1417_coursework/leaderboard.php">Leaderboard</a></li>
+        <li name="home" style="float:left"><a class="active" href="/ecm1417_coursework/index.php">Home</a></li>
+        <li name="tetris" style="float:right"><a href="/ecm1417_coursework/tetris.php">Play Tetris</a></li>
+        <li name="leaderboard" style="float:right"><a href="/ecm1417_coursework/leaderboard.php">Leaderboard</a></li>
     </ul>
 </body>
 </html>
