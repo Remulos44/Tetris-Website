@@ -41,5 +41,8 @@
         <li name="tetris"><a href="/ecm1417_coursework/tetris.php">Play Tetris</a></li>
         <li name="leaderboard"><a href="/ecm1417_coursework/leaderboard.php">Leaderboard</a></li>
     </ul>
+    <div class="main">
+        background-image: url("res/tetris.png");
+    </div>
 </body>
 </html>
