@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    title="index";
+    <title>index</title>
     <style>
 
     </style>
