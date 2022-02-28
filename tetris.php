@@ -34,7 +34,7 @@
     }
 
     div.main {
-        background-image: url("ecm1417_coursework/res/tetris.png");
+        background-image: url("tetris.png");
     }
     </style>
 </head>
