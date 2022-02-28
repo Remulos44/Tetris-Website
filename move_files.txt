@@ -1,0 +1,2 @@
+rm -rf ecm1417_coursework
+mv /home/ecm1417/Downloads/ecm1417_coursework /var/www/html
