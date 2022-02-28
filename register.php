@@ -30,7 +30,7 @@
         background-color: #111;
     }
 
-    .active {
+    a.active {
         background-color: #04AA6D;
     }
 

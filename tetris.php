@@ -29,7 +29,7 @@
         background-color: #111;
     }
 
-    .active {
+    a.active {
         background-color: #04AA6D;
     }
 
@@ -45,7 +45,7 @@
         <li name="leaderboard" style="float:right"><a href="/ecm1417_coursework/leaderboard.php">Leaderboard</a></li>
     </ul>
     <div class="main">
-        
+
     </div>
 </body>
 </html>
