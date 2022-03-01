@@ -41,17 +41,16 @@
         background-position: center;
         background-attachment: fixed;
         background-size: 95% auto;
+        margin-top: 50px;
     }
     </style>
 </head>
 <body>
-    <div class="navbar">
-        <ul>
-            <li name="home" style="float:left"><a href="/ecm1417_coursework/index.php">Home</a></li>
-            <li name="tetris" style="float:right"><a href="/ecm1417_coursework/tetris.php">Play Tetris</a></li>
-            <li name="leaderboard" style="float:right"><a href="/ecm1417_coursework/leaderboard.php">Leaderboard</a></li>
-        </ul>
-    </div>
+    <ul>
+        <li name="home" style="float:left"><a href="/ecm1417_coursework/index.php">Home</a></li>
+        <li name="tetris" style="float:right"><a href="/ecm1417_coursework/tetris.php">Play Tetris</a></li>
+        <li name="leaderboard" style="float:right"><a href="/ecm1417_coursework/leaderboard.php">Leaderboard</a></li>
+    </ul>
     <div class="main">
         <form id="register_form" action="/ecm1417_coursework/index.php">
             <label for="fname">First name:</label><br>
