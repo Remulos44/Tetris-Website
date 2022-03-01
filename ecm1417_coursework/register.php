@@ -8,14 +8,10 @@
         margin: 0;
         padding: 0;
         overflow: hidden;
-        background-color: #333;
+        background-color: blue;
         position: fixed;
         top: 0;
         width: 100%;
-    }
-
-    li {
-        float: left;
     }
 
     li a {
@@ -24,6 +20,9 @@
         text-align: center;
         padding: 14px 16px;
         text-decoration: none;
+        font-family: Arial;
+        font-weight: bold;
+        font-size: 12px;
     }
 
     li a:hover:not(.active) {
@@ -36,8 +35,11 @@
 
     div.main {
         background-image: url("res/tetris.png");
+        width: auto;
+        height: 1000px;
         background-repeat: no-repeat;
         background-position: center;
+        background-attachment: fixed;
         background-size: 95% auto;
     }
     </style>
