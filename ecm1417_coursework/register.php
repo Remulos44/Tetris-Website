@@ -51,7 +51,21 @@
         <li name="leaderboard"><a href="/ecm1417_coursework/leaderboard.php">Leaderboard</a></li>
     </ul>
     <div class="main">
-
+        <form id="register_form" action="/ecm1417_coursework/index.php">
+            <label for="fname">First name:</label><br>
+            <input type="text" id="fname" name="fname"><br>
+            <label for="lname">Last name:</lable><br>
+            <input type="text" id="lname" name="lname"><br>
+            <label for="uname">Username:</label><br>
+            <input type="text" id="uname" name="uname"><br>
+            <label for="pword">Password:</label><br>
+            <input type="password" id="pword" name="pword" placeholder="Password"><br>
+            <label for="cpword">Confirm password:</label><br>
+            <input type="password" id="cpword" name="cpword" placeholder="Confirm password"><br>
+            <label for="display">Display Scores on Leaderboard</label><br>
+            <input type="radio" id="display" name="display" value="Yes">
+            <input type="radio" id="display" name="display" value="No">
+        </form>
     </div>
 </body>
 </html>
