@@ -45,11 +45,13 @@
     </style>
 </head>
 <body>
-    <ul>
-        <li name="home" style="float:left"><a href="/ecm1417_coursework/index.php">Home</a></li>
-        <li name="tetris" style="float:right"><a href="/ecm1417_coursework/tetris.php">Play Tetris</a></li>
-        <li name="leaderboard" style="float:right"><a href="/ecm1417_coursework/leaderboard.php">Leaderboard</a></li>
-    </ul>
+    <div class="navbar">
+        <ul>
+            <li name="home" style="float:left"><a href="/ecm1417_coursework/index.php">Home</a></li>
+            <li name="tetris" style="float:right"><a href="/ecm1417_coursework/tetris.php">Play Tetris</a></li>
+            <li name="leaderboard" style="float:right"><a href="/ecm1417_coursework/leaderboard.php">Leaderboard</a></li>
+        </ul>
+    </div>
     <div class="main">
         <form id="register_form" action="/ecm1417_coursework/index.php">
             <label for="fname">First name:</label><br>
@@ -63,8 +65,10 @@
             <label for="cpword">Confirm password:</label><br>
             <input type="password" id="cpword" name="cpword" placeholder="Confirm password"><br>
             <label for="display">Display Scores on Leaderboard</label><br>
-            <input type="radio" id="display" name="display" value="Yes">
-            <input type="radio" id="display" name="display" value="No">
+            <label for="#yesdisplay">Yes</label>
+            <input type="radio" id="yesdisplay" name="display" value="Yes" checked>
+            <label for="#nodisplay">No</label>
+            <input type="radio" id="nodisplay" name="display" value="No">
         </form>
     </div>
 </body>
