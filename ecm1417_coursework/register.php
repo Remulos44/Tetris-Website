@@ -61,7 +61,6 @@
             <input type="text" id="uname" name="uname"><br>
             <label for="pword">Password:</label><br>
             <input type="password" id="pword" name="pword" placeholder="Password"><br>
-            <label for="cpword">Confirm password:</label><br>
             <input type="password" id="cpword" name="cpword" placeholder="Confirm password"><br>
             <label for="display">Display Scores on Leaderboard</label><br>
             <label for="#yesdisplay">Yes</label>
