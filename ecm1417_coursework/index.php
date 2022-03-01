@@ -51,7 +51,7 @@
         <li name="leaderboard" style="float:right"><a href="/ecm1417_coursework/leaderboard.php">Leaderboard</a></li>
     </ul>
     <div class="main">
-
+        
     </div>
 </body>
 </html>
