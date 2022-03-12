@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>index</title>
+    <title>Tetris - Leaderboard</title>
     <style>
     ul {
         list-style-type: none;
