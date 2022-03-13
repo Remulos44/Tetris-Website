@@ -35,10 +35,10 @@
 
     div.main {
         background-image: url("res/tetris.png");
-        width: auto;
-        height: 1000px;
+        width: 100%;
+        height: 500px;
         background-repeat: no-repeat;
-        background-position: center;
+        background-position: center center;
         background-attachment: fixed;
         background-size: 95% auto;
     }

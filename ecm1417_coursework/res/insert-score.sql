@@ -1,1 +1,1 @@
-INSERT INTO Scores VALUES (username, score);
+INSERT INTO Scores (Username, Score) VALUES (username, score);

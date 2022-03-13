@@ -35,13 +35,32 @@
 
     div.main {
         background-image: url("res/tetris.png");
-        width: auto;
-        height: 1000px;
+        width: 100%;
+        height: 900px;
         background-repeat: no-repeat;
-        background-position: center;
+        background-position: center center;
         background-attachment: fixed;
         background-size: 95% auto;
-        margin-top: 50px;
+    }
+
+    .reg-form {
+        margin-left: auto;
+        margin-right: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 40%;
+        padding: 10px;
+        background-color: #c7c7c7;
+        box-shadow: 5px 5px 10px;
+    }
+
+    #reg-title {
+        color: white;
+        text-align: center;
+        text-shadow: 1px 1px 1px black;
+        font-size: 50px;
     }
     </style>
 </head>
@@ -52,22 +71,27 @@
         <li name="leaderboard" style="float:right"><a href="/ecm1417_coursework/leaderboard.php">Leaderboard</a></li>
     </ul>
     <div class="main">
-        <form id="register_form" action="/ecm1417_coursework/index.php">
-            <label for="fname">First name:</label><br>
-            <input type="text" id="fname" name="fname"><br>
-            <label for="lname">Last name:</lable><br>
-            <input type="text" id="lname" name="lname"><br>
-            <label for="uname">Username:</label><br>
-            <input type="text" id="uname" name="uname"><br>
-            <label for="pword">Password:</label><br>
-            <input type="password" id="pword" name="pword" placeholder="Password"><br>
-            <input type="password" id="cpword" name="cpword" placeholder="Confirm password"><br>
-            <label for="display">Display Scores on Leaderboard</label><br>
-            <label for="#yesdisplay">Yes</label>
-            <input type="radio" id="yesdisplay" name="display" value="Yes" checked>
-            <label for="#nodisplay">No</label>
-            <input type="radio" id="nodisplay" name="display" value="No">
-        </form>
+        <div class="gap" style="height: 200px;"></div>
+        <div class="reg-form">
+            <h1 id="reg-title">Registration Form</h1><br>
+            <form id="register_form" action="/ecm1417_coursework/index.php" method="post">
+                <label for="fname">First name:</label><br>
+                <input type="text" id="fname" name="fname"><br><br>
+                <label for="lname">Last name:</lable><br>
+                <input type="text" id="lname" name="lname"><br><br>
+                <label for="uname">Username:</label><br>
+                <input type="text" id="uname" name="uname"><br><br>
+                <label for="pword">Password:</label><br>
+                <input type="password" id="pword" name="pword" placeholder="Password"><br>
+                <input type="password" id="cpword" name="cpword" placeholder="Confirm password"><br><br>
+                <label for="display">Display Scores on Leaderboard</label><br>
+                <label for="yes">Yes</label>
+                <input type="radio" id="yes" name="display" value=1 checked>
+                <label for="no">No</label>
+                <input type="radio" id="no" name="display" value=0><br><br>
+                <input type="submit" value="Register">
+            </form>
+        </div>
     </div>
 </body>
 </html>
