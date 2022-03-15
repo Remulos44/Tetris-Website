@@ -55,7 +55,10 @@
         table, th, td {
             border: 1px solid black;
             border-spacing: 2px;
-            width: 100%;
+            width: auto;
+        }
+        td {
+            text-align: center;
         }
     </style>
 </head>
