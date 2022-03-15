@@ -53,6 +53,7 @@
             box-shadow: 5px 5px 10px;
         }
         #results-table {
+            border: 1px solid black;
             border-spacing: 2px;
         }
     </style>
