@@ -37,6 +37,7 @@
             background-position: center center;
             background-attachment: fixed;
             background-size: 95% auto;
+            overflow: auto;
         }
         div.table {
             margin-left: auto;
