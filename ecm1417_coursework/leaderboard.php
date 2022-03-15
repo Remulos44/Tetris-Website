@@ -55,7 +55,7 @@
         table, th, td {
             border: 1px solid black;
             border-spacing: 2px;
-            width: 75%;
+            width: 100%;
         }
         td {
             text-align: center;
