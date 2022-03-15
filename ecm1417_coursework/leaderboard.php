@@ -74,7 +74,7 @@
         <div class="table">
             <?php
                 require "res/connect.php";
-                $sql = "SELECT * FROM Scores";
+                $sql = "SELECT Scores.Username, Score, Display FROM Scores, Users WHERE Scores.Username = Users.Username";
                 $result = mysqli_query($conn, $sql);
 
                 echo "<table>
