@@ -52,9 +52,10 @@
             background-color: #c7c7c7;
             box-shadow: 5px 5px 10px;
         }
-        #results-table {
+        table, tr, th {
             border: 1px solid black;
             border-spacing: 2px;
+            width: 100%;
         }
     </style>
 </head>
@@ -71,7 +72,7 @@
                 $sql = "SELECT * FROM Scores";
                 $result = mysqli_query($conn, $sql);
 
-                echo "<table id='results-table'>
+                echo "<table>
                 <tr>
                 <th>Username</th>
                 <th>Score</th>
