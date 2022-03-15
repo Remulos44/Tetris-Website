@@ -52,7 +52,7 @@
             background-color: #c7c7c7;
             box-shadow: 5px 5px 10px;
         }
-        table, tr, th {
+        table, th, td {
             border: 1px solid black;
             border-spacing: 2px;
             width: 100%;
