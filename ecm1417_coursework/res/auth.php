@@ -4,7 +4,7 @@ require "connect.php";
 if (!isset($_POST['log-uname']) && !isset($_POST['log-pword'])) {
     exit("Please fill in both the Username and Password");
 }
-$sql = "SELECT Password FROM Users WHERE Username='".$_POST['log-uname']."' LIMIT 1;";
+$sql = "SELECT Password, Display, firstName FROM Users WHERE Username='".$_POST['log-uname']."' LIMIT 1;";
 $result = mysqli_query($conn, $sql);
 
 if (mysqli_num_rows($result) == 1) {
@@ -13,6 +13,8 @@ if (mysqli_num_rows($result) == 1) {
         session_regenerate_id();
         $_SESSION['loggedin'] = true;
         $_SESSION['username'] = $_POST['log-uname'];
+        $_SESSION['display'] = $row['Display'];
+        $_SESSION['fName'] = $row['firstName'];
         echo "<script type='text/javascript'>alert('Login successful');</script>";
     } else {
         echo "<script type='text/javascript'>alert('Password incorrect');</script>";

@@ -41,11 +41,13 @@
         background-position: center center;
         background-attachment: fixed;
         background-size: 95% auto;
+        overflow: auto;
     }
 
     .reg-form {
         margin-left: auto;
         margin-right: auto;
+        margin-top: 200px;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -71,7 +73,7 @@
         <li name="leaderboard" style="float:right"><a href="/ecm1417_coursework/leaderboard.php">Leaderboard</a></li>
     </ul>
     <div class="main">
-        <div class="gap" style="height: 200px;"></div>
+        <!-- <div class="gap" style="height: 200px;"></div> -->
         <div class="reg-form">
             <h1 id="reg-title">Registration Form</h1><br>
             <form id="register_form" action="/ecm1417_coursework/index.php" method="post">
@@ -86,9 +88,9 @@
                 <input type="password" id="cpword" name="cpword" placeholder="Confirm password"><br><br>
                 <label for="display">Display Scores on Leaderboard</label><br>
                 <label for="yes">Yes</label>
-                <input type="radio" id="yes" name="display" value=1 checked>
+                <input type="radio" id="yes" name="display" value="yes" checked>
                 <label for="no">No</label>
-                <input type="radio" id="no" name="display" value=0><br><br>
+                <input type="radio" id="no" name="display" value="no"><br><br>
                 <input type="submit" value="Register">
             </form>
         </div>
