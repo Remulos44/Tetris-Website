@@ -70,6 +70,7 @@
             top: 0;
             outline: 1px black solid;
             outline-offset: -10px;
+            display: block;
         }
         #play-button {
             margin-top: 10px;
@@ -119,12 +120,13 @@
     <script>
         function loadPage() {
             document.getElementById("play-button").style.display="inline-block";
-            document.getElementByClassName("next-block").style.display="none";
+            document.getElementByClassName("next-block").style.visibility="hidden";
+            alert('shape');
             nextShape();
         }
         function startGame() {
             document.getElementById("play-button").style.display="none";
-            document.getElementByClassName("next-block").style.display="block";
+            document.getElementByClassName("next-block").style.visibility=null;
         }
 
         var grid = [...Array(10)].map(e => Array(20));
@@ -142,7 +144,7 @@
         function nextShape() {
             var shapesTwo = ["L","Z","S","T","O","I","J"];
             var next = shapesTwo[Math.floor(Math.random()*7)];
-            alert(next);
+            alert('shape');
         }
     </script>
 </body>
