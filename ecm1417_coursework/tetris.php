@@ -137,6 +137,31 @@
             "J": [ [1,1],[2,1],[1,2],[1,3] ]
         };
 
+        // Select Next Random Block
+        switch Math.floor(Math.random()*7) {
+            case 0:
+                next = "L";
+                break;
+            case 1:
+                next = "Z";
+                break;
+            case 2:
+                next = "S";
+                break;
+            case 3:
+                next = "T";
+                break;
+            case 4:
+                next = "O";
+                break;
+            case 5:
+                next = "I";
+                break;
+            case 6:
+                next = "J";
+                break;
+        }
+
     </script>
 </body>
 </html>
