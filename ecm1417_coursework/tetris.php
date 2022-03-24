@@ -120,6 +120,7 @@
         function loadPage() {
             document.getElementById("play-button").style.display="inline-block";
             document.getElementByClassName("next-block").style.display="none";
+            nextShape();
         }
         function startGame() {
             document.getElementById("play-button").style.display="none";
@@ -138,30 +139,11 @@
         };
 
         // Select Next Random Block
-        switch Math.floor(Math.random()*7) {
-            case 0:
-                next = "L";
-                break;
-            case 1:
-                next = "Z";
-                break;
-            case 2:
-                next = "S";
-                break;
-            case 3:
-                next = "T";
-                break;
-            case 4:
-                next = "O";
-                break;
-            case 5:
-                next = "I";
-                break;
-            case 6:
-                next = "J";
-                break;
+        function nextShape() {
+            var shapesTwo = ["L","Z","S","T","O","I","J"];
+            var next = shapesTwo[Math.floor(Math.random()*7)];
+            alert(next);
         }
-
     </script>
 </body>
 </html>
