@@ -145,7 +145,10 @@
             var shapesTwo = ["L","Z","S","T","O","I","J"];
             var next = shapesTwo[Math.floor(Math.random()*7)];
             alert('shape');
+            
         }
     </script>
+
+
 </body>
 </html>
