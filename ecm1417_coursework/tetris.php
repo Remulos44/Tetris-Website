@@ -3,7 +3,7 @@
 <head>
     <title>Tetris - Game</title>
     <style>
-        ul {
+        ul.top-list {
             list-style-type: none;
             margin: 0;
             padding: 0;
@@ -38,6 +38,10 @@
             background-position: center center;
             background-attachment: fixed;
             background-size: 95% auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
         }
         div.game {
             display: flex;
@@ -61,8 +65,9 @@
         }
         #play-button {
             margin-top: 10px;
+            margin-bottom: 10px;
             background-color: white;
-            border: 2px solid blue;
+            border: 2px solid #dd67db;
             color: black;
             padding: 15px 32px;
             text-align: center;
@@ -84,14 +89,54 @@
         #O { background-color: #ffff00; }
         #I { background-color: #00ffff; }
         #J { background-color: #0000ff; }
+        #score-div {
+            background-color: #c7c7c7;
+            box-shadow: 5px 5px 10px;
+            width: 200px;
+            height: 50px;
+            padding: 10px;
+            position: absolute;
+            right: -230px;
+            top: 230px;
+            outline: 1px black solid;
+            outline-offset: -10px;
+            /* display: block; */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        #score-text {
+            color: white;
+            text-shadow: 1px 1px 1px black;
+            font-size: 24px;
+        }
+        #instructions-div {
+            background-color: #c7c7c7;
+            box-shadow: 5px 5px 10px;
+            width: 300px;
+            height: auto;
+            padding: 10px;
+            position: absolute;
+            right: 330px;
+            top: 0;
+            outline: 1px black solid;
+            outline-offset: -10px;
+            display: block;
+        }
+        #instructions-text {
+            color: black;
+            text-shadow: 1px 1px 1px white;
+            font-size: 18px;
+        }
         #next-block-div {
             background-color: #c7c7c7;
             box-shadow: 5px 5px 10px;
-            width: 150px;
-            height: 150px;
+            width: 200px;
+            height: 200px;
             padding: 10px;
             position: absolute;
-            right: -200px;
+            right: -230px;
             top: 0;
             outline: 1px black solid;
             outline-offset: -10px;
@@ -100,6 +145,9 @@
         #next-block-text {
             width: auto;
             text-align: center;
+            color: white;
+            text-shadow: 1px 1px 1px black;
+            font-size: 24px;
         }
         div.tetris-block-main {
             position: absolute;
@@ -108,19 +156,44 @@
         }
         div.tetris-block-next {
             position: absolute;
-            bottom: 10px;
-            left: 10px;
+            left: 65px;
+            bottom: 20px;
         }
         div.tetris-block-piece {
             position: absolute;
             width: 30px;
             height: 30px;
         }
+        div.pause-menu {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            width: 60%;
+            height: auto;
+            padding: 10px;
+            left: 0;
+            right: 0;
+            margin-left: auto;
+            margin-right: auto;
+            top: 400px;
+            background-color: #c7c7c7;
+            box-shadow: 5px 5px 10px;
+            position: absolute;
+            outline: 1px black solid;
+            outline-offset: -10px;
+        }
+        .pause-title {
+            color: white;
+            text-align: center;
+            text-shadow: 1px 1px 1px black;
+            font-size: 50px;
+        }
 
     </style>
 </head>
 <body onload="loadPage()">
-    <ul>
+    <ul class="top-list">
         <li name="home" style="float:left"><a href="/ecm1417_coursework/index.php">Home</a></li>
         <li name="tetris" style="float:right"><a class="active" href="/ecm1417_coursework/tetris.php">Play Tetris</a></li>
         <li name="leaderboard" style="float:right"><a href="/ecm1417_coursework/leaderboard.php">Leaderboard</a></li>
@@ -128,18 +201,44 @@
     <div class="main">
         <div class="game" id="game">
             <div id="tetris-bg"></div>
-            <button type="button" id="play-button" onclick="startGame()">Start the game</button>
             <div id="next-block-div">
-                <p id="next-block-text">Next Block</p>
+                <h1 id="next-block-text">Next Block</h1>
+            </div>
+            <div id="score-div">
+                <h1 id="score-text">Score: </h1>
+            </div>
+            <div id="instructions-div">
+                <h1 id="score-text">Instructions:</h1>
+                <ul id="instructions-text">
+                    <li><strong>Left Arrow</strong> -> Move Left</li><br>
+                    <li><strong>Right Arrow</strong> -> Move Right</li><br>
+                    <li><strong>Up Arrow</strong> -> Rotate (WIP)</li><br>
+                    <li><strong>Down Arrow</strong> -> Move Down</li><br>
+                    <li><strong>Space</strong> -> Instantly Place Block</li><br>
+                    <li><strong>Esc</strong> -> Pause</li>
+                </ul>
             </div>
         </div>
+        <!-- <button type="button" id="play-button" onclick="startGame()">Start the game</button> -->
     </div>
 
     <script>
+
+        // TODO
+        // - Auto down
+        // - Rotation
+        // - Score
+
         // Globals
         var currentBlock;
         var nextBlock;
+        var pauseBlock;
+        var currentBlockId;
+        var nextBlockId;
+        var coords = [4,20];
+        var score;
         var gameActive = false;
+        var paused = false;
         var grid = [...Array(10)].map(e => Array(20));
         var shapes = {
             "L": [ [1,1],[2,1],[3,1],[3,2] ],
@@ -150,23 +249,60 @@
             "I": [ [1,1],[1,2],[1,3],[1,4] ],
             "J": [ [1,1],[1,2],[2,1],[3,1] ]
         };
+        var newBlockEvent = new CustomEvent('nextBlock');
 
         // Executes at Page Load
         function loadPage() {
-            document.getElementById("play-button").style.display="inline-block";
-            document.getElementById("next-block-div").style.visibility="hidden";
+            // document.getElementById("play-button").style.display="inline-block";
+            // document.getElementsByClassName("pause-menu")[0].style.visibility="hidden";
+            var button = document.createElement('button');
+            button.setAttribute('type', 'button');
+            button.setAttribute('id', 'play-button');
+            button.setAttribute('onclick', 'startGame()');
+            button.innerText = 'Start the Game';
+            document.getElementsByClassName('main')[0].appendChild(button);
         }
 
         // Executes When 'play-button' Pressed
         function startGame() {
-            document.getElementById("play-button").style.display="none";
-            document.getElementById("next-block-div").style.visibility=null;
-            gameLoop();
+            // document.getElementById("play-button").style.visibility="hidden";
+            document.getElementById('play-button').remove();
+            document.getElementsByClassName('game')[0].style.marginBottom = '76px';
+
+            gameActive = true;
+            score = 0;
+            nextBlock = assignNextBlock();
+
+            document.dispatchEvent(newBlockEvent);
         }
+
+        // Next Block Event Handler
+        document.addEventListener('nextBlock', function(e) {
+            cloneNextToCurrent();
+            nextBlock = assignNextBlock();
+        });
+
+        // Keydown Event Listener
+        document.addEventListener('keydown', function(e) {
+            if (gameActive) {
+                switch(e.keyCode) {
+                    case 37: move("left")   ; break;
+                    case 39: move("right")  ; break;
+                    case 40: move("down")   ; break;
+                    case 38: alert("rotate"); break;
+                    case 32: instantPlace() ; break;
+                    case 27:
+                        if (paused) {
+                            unPauseGame();
+                        } else {
+                            pauseGame();
+                        }
+                }
+            }
+        });
 
         // Select Random Shape
         function selectRandomBlock() {
-            alert("selectRandomBlock()");
             var shapesIdArr = ["L","Z","S","T","O","I","J"];
             var blockId = shapesIdArr[Math.floor(Math.random()*7)];
             return blockId;
@@ -174,19 +310,15 @@
 
         // Display Next Random Shape
         function assignNextBlock() {
-            alert("assignNextBlock()");
             // Select random blockID
-            var blockId = selectRandomBlock();
+            nextBlockId = selectRandomBlock();
 
             // Check for existing tetris-block-next
             var nextBlockDivChildren = document.getElementById('next-block-div').children;
             for (i=0; i<nextBlockDivChildren.length; i++) {
                 if (nextBlockDivChildren[i].getAttribute('class') === "tetris-block-next") {
-                    alert("removing existing tetris-block-next");
                     nextBlockDivChildren[i].remove();
                     break;
-                } else {
-                    alert("tetris-block-next doesn't exist yet");
                 }
             }
 
@@ -198,14 +330,13 @@
             document.getElementById('next-block-div').appendChild(tetrisBlockNext);
 
             // Create the tetris block inside container
-            generateBlock(tetrisBlockNext, blockId);
+            generateBlock(tetrisBlockNext, nextBlockId);
 
             return tetrisBlockNext;
         }
 
         // Generate Block
         function generateBlock(parent, blockId) {
-            alert("generateBlock()");
             for (let i=0; i<4; i++) {
                 // Create blockPiece, assign class & ID
                 var blockPiece = document.createElement('div');
@@ -225,25 +356,211 @@
 
         // Clone next block, assign to current block
         function cloneNextToCurrent() {
-            alert("cloneNextToCurrent");
             currentBlock = nextBlock.cloneNode(true);
             currentBlock.setAttribute('class', 'tetris-block-main');
+
+            var tempCoords = [];
+            var a = 0;
+            var b;
+            for (let i=0; i<4; i++) {
+                for (let j=0; j<2; j++) {
+                    tempCoords[j] = coords[j] + (shapes[nextBlockId][i][j] - 1);
+                }
+                // Check Horizontal
+                if (tempCoords[0] >=10) {
+                        b = tempCoords[0]-9;
+                        if (b > a) {
+                            a = b;
+                        }
+                    }
+            }
+
+            coords = [coords[0]-a,20];
+            currentBlock.style.left = (10+(coords[0]*30)) + 'px';
             document.getElementById('game').appendChild(currentBlock);
+            currentBlockId = nextBlockId;
         }
 
-        // Main Game Loop
-        function gameLoop() {
-            alert("gameLoop()");
-            gameActive = true;
-            nextBlock = assignNextBlock();
-            for (let i=0; i<10; i++) {
-                cloneNextToCurrent();
-                var num = 30*i + 30;
-                currentBlock.style.transform = 'translate(0px,'+num+'px)';
-                nextBlock = assignNextBlock();
-                gameActive=false;
+        // Move the Block
+        function move(direction) {
+            var left;
+            var down;
+            var leftTR;
+            var downTR;
+            var currentTranslation = [];
+            var noCollision = checkCollision(direction);
+
+            if (noCollision) {
+                switch(direction) {
+                    case 'left'    : left = -1; down = 0; break;
+                    case 'right'   : left =  1; down = 0; break;
+                    case 'down'    : left =  0; down = 1; break;
+                    case 'autoDown': left =  0; down = 1; break;
+                }
+                currentTranslation = getCurrentTranslation();
+                if (currentTranslation) {
+                    leftTR = parseInt(currentTranslation[0]) + (left*30);
+                    downTR = parseInt(currentTranslation[1]) + (down*30);
+                    currentBlock.style.transform = 'translate('+leftTR+'px,'+downTR+'px)';
+                } else {
+                    currentBlock.style.transform = 'translate('+left*30+'px,'+down*30+'px)';
+                }
+
+                coords[0] += left;
+                coords[1] -= down;
             }
-            alert("end of game");
+            if (direction === 'down' && !noCollision) {
+                // alert("down & collision!");
+                setBlock();
+                // checkForLines();
+                if (gameActive) {
+                document.dispatchEvent(newBlockEvent);
+                }
+            }
+        }
+
+        // Check For Any Complete Lines
+        // function checkForLines() {
+        //     for (let i=0; i<20; i++) {
+        //         for (let j=0; j<10; j++) {
+        //
+        //         }
+        //     }
+        // }
+
+        // Instantly Move Block to Bottom
+        function instantPlace() {
+            var noCollision = true;
+            while (noCollision) {
+                noCollision = checkCollision("down");
+                move("down");
+            }
+        }
+
+        // Get Current Translation
+        function getCurrentTranslation() {
+            var str = currentBlock.style.transform;
+            var xyArr = [];
+            if (str != '') {
+                xyArr = str.match(/-?[0-9]+/g);
+                if (xyArr.length === 1) {
+                    xyArr[1]='0';
+                }
+            } else {
+                xyArr = ['0','0'];
+            }
+            return xyArr;
+        }
+
+        // Check Block is Within Bounds
+        function checkCollision(direction) {
+            var noCollision = true;
+            var tempCoords = [];
+            var left;
+            var down;
+            switch(direction) {
+                case 'left'    : left = -1; down =  0; break;
+                case 'right'   : left =  1; down =  0; break;
+                case 'down'    : left =  0; down = -1; break;
+                case 'autoDown': left =  0; down = -1; break;
+            }
+            for (let i=0; i<4; i++) {
+                for (let j=0; j<2; j++) {
+                    tempCoords[j] = coords[j] + (shapes[currentBlockId][i][j] - 1);
+                }
+                // Check Vertical
+                if (tempCoords[1] <= 20) {
+                    if (grid[tempCoords[0]+left][tempCoords[1]+down] != null ||
+                        tempCoords[1]+down < 0) {
+                            noCollision = false;
+                            break;
+                        }
+                }
+                // Check Horizontal
+                if (tempCoords[0]+left < 0 ||
+                    tempCoords[0]+left >=10) {
+                        noCollision = false;
+                        break;
+                    }
+            }
+            return noCollision;
+        }
+
+        // Set the block into grid
+        function setBlock() {
+            var tempCoords = [];
+            for (let i=0; i<4; i++) {
+                for (let j=0; j<2; j++) {
+                    tempCoords[j] = coords[j] + (shapes[currentBlockId][i][j] - 1);
+                }
+                if (tempCoords[1] > 19) {
+                    gameOver();
+                    break;
+                } else {
+                    grid[tempCoords[0]][tempCoords[1]] = currentBlockId;
+
+                    var left = 10;
+                    var bottom = 10;
+                    var block = document.createElement('div');
+                    block.setAttribute('id', currentBlockId);
+                    var location = tempCoords[0] + "," + tempCoords[1];
+                    block.setAttribute('class', 'tetris-block-piece '+location)
+                    left += tempCoords[0]*30;
+                    bottom += tempCoords[1]*30;
+                    block.style.left = left+'px';
+                    block.style.bottom = bottom+'px';
+                    document.getElementById('game').appendChild(block);
+                }
+            }
+            currentBlock.remove();
+        }
+
+        // Pause Game
+        function pauseGame() {
+            paused = true;
+            pauseBlock = currentBlock;
+            currentBlock = null;
+
+            // document.getElementsByClassName("pause-menu")[0].style.visibility=null;
+            var menu = document.createElement('div');
+            menu.setAttribute('class', 'pause-menu');
+            document.getElementsByClassName('main')[0].appendChild(menu);
+
+            var text = document.createElement('h1');
+            text.setAttribute('class', 'pause-title');
+            menu.appendChild(text);
+            text.innerText = 'Paused';
+
+            var newButton = document.createElement('button');
+            newButton.setAttribute('id','play-button');
+            newButton.innerText = 'Unpause Game';
+            newButton.setAttribute('onclick', 'unPauseGame()');
+            menu.appendChild(newButton);
+
+            document.getElementById("next-block-div").style.backgroundColor="#777777";
+            document.getElementById("game").style.backgroundColor="#777777";
+            document.getElementById("instructions-div").style.backgroundColor="#777777";
+        }
+
+        // Unpause Game
+        function unPauseGame() {
+            currentBlock = pauseBlock;
+            pauseBlock = null;
+            paused = false;
+
+            // document.getElementsByClassName("pause-menu")[0].style.visibility="hidden";
+            document.getElementsByClassName('pause-menu')[0].remove();
+
+            document.getElementById("next-block-div").style.backgroundColor="#c7c7c7";
+            document.getElementById("game").style.backgroundColor="#c7c7c7";
+            document.getElementById("instructions-div").style.backgroundColor="#c7c7c7";
+        }
+
+        // End of Game
+        function gameOver() {
+            alert("game over");
+            gameActive = false;
+            currentBlock = null;
         }
     </script>
 </body>
