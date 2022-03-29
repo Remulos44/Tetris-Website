@@ -224,10 +224,16 @@
 
     <script>
 
-        // TODO
-        // - Auto down
-        // - Rotation
-        // - Score
+        /*
+        TODO
+        > Auto down
+        > Rotation
+        > Score
+        > End of Game
+        > Option to Reset Game
+        > > removeExistingBlockPieces() function
+        > Music
+        */
 
         // Globals
         var currentBlock;
@@ -269,8 +275,16 @@
             document.getElementById('play-button').remove();
             document.getElementsByClassName('game')[0].style.marginBottom = '76px';
 
-            gameActive = true;
             score = 0;
+            if (gameActive) { // For when resetting the game
+                if (paused) { unPauseGame(); }
+                if (currentBlock != null) { currentBlock.remove(); }
+                currentBlock = null;
+                coords = [4,20];
+                grid = [...Array(10)].map(e => Array(20));
+                removeExistingBlockPieces();
+            }
+            gameActive = true;
             nextBlock = assignNextBlock();
 
             document.dispatchEvent(newBlockEvent);
@@ -397,7 +411,7 @@
                     case 'down'    : left =  0; down = 1; break;
                     case 'autoDown': left =  0; down = 1; break;
                 }
-                currentTranslation = getCurrentTranslation();
+                currentTranslation = getCurrentTranslation(currentBlock);
                 if (currentTranslation) {
                     leftTR = parseInt(currentTranslation[0]) + (left*30);
                     downTR = parseInt(currentTranslation[1]) + (down*30);
@@ -412,7 +426,6 @@
             if (direction === 'down' && !noCollision) {
                 // alert("down & collision!");
                 setBlock();
-                // checkForLines();
                 if (gameActive) {
                 document.dispatchEvent(newBlockEvent);
                 }
@@ -420,13 +433,52 @@
         }
 
         // Check For Any Complete Lines
-        // function checkForLines() {
-        //     for (let i=0; i<20; i++) {
-        //         for (let j=0; j<10; j++) {
-        //
-        //         }
-        //     }
-        // }
+        function checkForLines() {
+            loop1:
+            for (let row=0; row<20; row++) {
+                let lineFull = true;
+                loop2:
+                for (let column=0; column<10; column++) {
+                    if (grid[column][row] == null) {
+                        lineFull = false;
+                        break loop2;
+                    }
+                }
+                if (lineFull) {
+                    reAdjustBlocks(row);
+                    checkForLines();
+                    break loop1;
+                }
+            }
+        }
+
+        // Adjusts blocks if row is removed
+        function reAdjustBlocks(rowRemoved) {
+            // Remove the Row
+            for (let column=0; column<10; column++) {
+                grid[column][rowRemoved] = null;
+                let className = 'tetris-block-piece ' + column + ',' + rowRemoved;
+                document.getElementsByClassName(className)[0].remove();
+            }
+
+            // Move above, down
+            for (let row=rowRemoved+1; row<20; row++) {
+                for (let column=0; column<10; column++) {
+                    if (grid[column][row] != null) {
+                        grid[column][row-1] = grid[column][row];
+                        grid[column][row] = null;
+                        let className = 'tetris-block-piece ' + column + ',' + row;
+                        let block = document.getElementsByClassName(className)[0];
+                        let bottom = parseInt(block.style.bottom.match(/[0-9]+/));
+                        let newBottom = bottom-30;
+                        block.style.bottom = newBottom + 'px';
+                        let newRowClass = row-1;
+                        let newClass = 'tetris-block-piece ' + column + ',' + newRowClass;
+                        block.setAttribute('class', newClass);
+                    }
+                }
+            }
+        }
 
         // Instantly Move Block to Bottom
         function instantPlace() {
@@ -438,8 +490,8 @@
         }
 
         // Get Current Translation
-        function getCurrentTranslation() {
-            var str = currentBlock.style.transform;
+        function getCurrentTranslation(block) {
+            var str = block.style.transform;
             var xyArr = [];
             if (str != '') {
                 xyArr = str.match(/-?[0-9]+/g);
@@ -513,47 +565,58 @@
                 }
             }
             currentBlock.remove();
+            checkForLines();
         }
 
         // Pause Game
         function pauseGame() {
-            paused = true;
-            pauseBlock = currentBlock;
-            currentBlock = null;
+            if (gameActive == true) {
+                paused = true;
+                pauseBlock = currentBlock;
+                currentBlock = null;
 
-            // document.getElementsByClassName("pause-menu")[0].style.visibility=null;
-            var menu = document.createElement('div');
-            menu.setAttribute('class', 'pause-menu');
-            document.getElementsByClassName('main')[0].appendChild(menu);
+                // document.getElementsByClassName("pause-menu")[0].style.visibility=null;
+                var menu = document.createElement('div');
+                menu.setAttribute('class', 'pause-menu');
+                document.getElementsByClassName('main')[0].appendChild(menu);
 
-            var text = document.createElement('h1');
-            text.setAttribute('class', 'pause-title');
-            menu.appendChild(text);
-            text.innerText = 'Paused';
+                var text = document.createElement('h1');
+                text.setAttribute('class', 'pause-title');
+                menu.appendChild(text);
+                text.innerText = 'Paused';
 
-            var newButton = document.createElement('button');
-            newButton.setAttribute('id','play-button');
-            newButton.innerText = 'Unpause Game';
-            newButton.setAttribute('onclick', 'unPauseGame()');
-            menu.appendChild(newButton);
+                var unpauseButton = document.createElement('button');
+                unpauseButton.setAttribute('id','play-button');
+                unpauseButton.innerText = 'Unpause Game';
+                unpauseButton.setAttribute('onclick', 'unPauseGame()');
+                menu.appendChild(unpauseButton);
 
-            document.getElementById("next-block-div").style.backgroundColor="#777777";
-            document.getElementById("game").style.backgroundColor="#777777";
-            document.getElementById("instructions-div").style.backgroundColor="#777777";
+                var restartButton = document.createElement('button');
+                restartButton.setAttribute('id','play-button');
+                restartButton.innerText = 'Restart Game';
+                restartButton.setAttribute('onclick', 'startGame()');
+                menu.appendChild(restartButton);
+
+                document.getElementById("next-block-div").style.backgroundColor="#777777";
+                document.getElementById("game").style.backgroundColor="#777777";
+                document.getElementById("instructions-div").style.backgroundColor="#777777";
+            }
         }
 
         // Unpause Game
         function unPauseGame() {
-            currentBlock = pauseBlock;
-            pauseBlock = null;
-            paused = false;
+            if (gameActive == true) {
+                currentBlock = pauseBlock;
+                pauseBlock = null;
+                paused = false;
 
-            // document.getElementsByClassName("pause-menu")[0].style.visibility="hidden";
-            document.getElementsByClassName('pause-menu')[0].remove();
+                // document.getElementsByClassName("pause-menu")[0].style.visibility="hidden";
+                document.getElementsByClassName('pause-menu')[0].remove();
 
-            document.getElementById("next-block-div").style.backgroundColor="#c7c7c7";
-            document.getElementById("game").style.backgroundColor="#c7c7c7";
-            document.getElementById("instructions-div").style.backgroundColor="#c7c7c7";
+                document.getElementById("next-block-div").style.backgroundColor="#c7c7c7";
+                document.getElementById("game").style.backgroundColor="#c7c7c7";
+                document.getElementById("instructions-div").style.backgroundColor="#c7c7c7";
+            }
         }
 
         // End of Game
