@@ -304,7 +304,7 @@
                     case 37: move("left")   ; break;
                     case 39: move("right")  ; break;
                     case 40: move("down")   ; break;
-                    case 38: alert("rotate"); break;
+                    case 38: alert("rotate (WIP)"); break;
                     case 32: instantPlace() ; break;
                     case 27:
                         if (paused) {
