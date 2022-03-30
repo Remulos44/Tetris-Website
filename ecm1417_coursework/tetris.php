@@ -227,10 +227,9 @@
 
         /*
         TODO
-        > Auto down
         > Rotation
         > Score
-        > End of Game
+        > > End of Game
         */
 
         // Globals
