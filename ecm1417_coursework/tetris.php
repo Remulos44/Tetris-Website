@@ -625,7 +625,7 @@
                 currentBlock = pauseBlock;
                 pauseBlock = null;
                 paused = false;
-                timer = setInterval(move('autoDown'), 1000);
+                timer = setInterval(function(e) {move('autoDown');}, 1000);
 
                 // document.getElementsByClassName("pause-menu")[0].style.visibility="hidden";
                 document.getElementsByClassName('pause-menu')[0].remove();
