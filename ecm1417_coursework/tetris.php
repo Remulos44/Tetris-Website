@@ -288,7 +288,7 @@
             nextBlock = assignNextBlock();
 
             document.dispatchEvent(newBlockEvent);
-            timer = window.setInterval(move('autodown'), 1000);
+            timer = setInterval(function(e) {move('autoDown');}, 1000);
         }
 
         // Next Block Event Handler
@@ -439,8 +439,7 @@
                 coords[0] += left;
                 coords[1] -= down;
             }
-            if (direction === 'down' && !noCollision) {
-                // alert("down & collision!");
+            if (direction === 'autoDown' && !noCollision) {
                 setBlock();
                 if (gameActive) {
                 document.dispatchEvent(newBlockEvent);
@@ -501,7 +500,7 @@
             var noCollision = true;
             while (noCollision) {
                 noCollision = checkCollision("down");
-                move("down");
+                move("autoDown");
             }
         }
 
@@ -590,6 +589,7 @@
                 paused = true;
                 pauseBlock = currentBlock;
                 currentBlock = null;
+                clearInterval(timer);
 
                 // document.getElementsByClassName("pause-menu")[0].style.visibility=null;
                 var menu = document.createElement('div');
@@ -625,6 +625,7 @@
                 currentBlock = pauseBlock;
                 pauseBlock = null;
                 paused = false;
+                timer = setInterval(move('autoDown'), 1000);
 
                 // document.getElementsByClassName("pause-menu")[0].style.visibility="hidden";
                 document.getElementsByClassName('pause-menu')[0].remove();
@@ -637,6 +638,7 @@
 
         // End of Game
         function gameOver() {
+            clearInterval(timer);
             alert("game over");
             gameActive = false;
             currentBlock = null;
