@@ -251,8 +251,6 @@
         /*
         TODO
         > Rotation
-        > Score
-        > > End of Game
         */
 
         // Globals
