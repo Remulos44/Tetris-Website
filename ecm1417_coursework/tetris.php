@@ -251,6 +251,7 @@
         /*
         TODO
         > Rotation
+        > gameOver() while not logged in
         */
 
         // Globals

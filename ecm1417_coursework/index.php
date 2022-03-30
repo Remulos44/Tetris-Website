@@ -34,6 +34,31 @@
         mysqli_close($conn);
     ?>
 
+    <!-- <?php
+        // if( isset($_POST['uname']) && isset($_POST['pword']) ) {
+        //     $postdata = http_build_query(
+        //         array(
+        //             'log-uname' => $_POST['uname'],
+        //             'log-pword' => $_POST['pword']
+        //         )
+        //     );
+        //     $opts = array('http' =>
+        //         array(
+        //             'method' => 'POST',
+        //             'header' => 'Content-type: application/x-www-form-urlencoded',
+        //             'content' => $postdata
+        //         )
+        //     );
+        //     $context = stream_context_create($opts);
+        //     $result = file_get_contents('res/auth.php', false, $context);
+        //     echo "<script type='text/javascript'>console.log(".$result.");</script>";
+        //     echo "\n--";
+        //     echo "\n<script type='text/javascript'>console.log(".$result.");</script>";
+        //     if ($_SESSION['loggedin']) { echo "\nLogged in"; } else { echo "\nNot Logged In"; }
+        //     header("Refresh:0");
+        // }
+    ?> -->
+
     <style>
         ul {
             list-style-type: none;
@@ -68,7 +93,7 @@
         div.main {
             background-image: url("res/tetris.png");
             width: 100%;
-            height: 700px;
+            height: auto;
             background-repeat: no-repeat;
             background-position: center center;
             background-attachment: fixed;
@@ -80,6 +105,7 @@
             margin-left: auto;
             margin-right: auto;
             margin-top: 200px;
+            margin-bottom: 76px;
             flex-direction: column;
             justify-content: center;
             align-items: center;

@@ -4,6 +4,7 @@ require "connect.php";
 if (!isset($_POST['log-uname']) && !isset($_POST['log-pword'])) {
     exit("Please fill in both the Username and Password");
 }
+echo "<script type='text/javascript'>console.log('TESTING');</script>";
 $sql = "SELECT Password, Display, firstName FROM Users WHERE Username='".$_POST['log-uname']."' LIMIT 1;";
 $result = mysqli_query($conn, $sql);
 
@@ -15,12 +16,12 @@ if (mysqli_num_rows($result) == 1) {
         $_SESSION['username'] = $_POST['log-uname'];
         $_SESSION['display'] = $row['Display'];
         $_SESSION['fName'] = $row['firstName'];
-        echo "<script type='text/javascript'>alert('Login successful');</script>";
+        echo "<script type='text/javascript'>console.log('Login successful');</script>";
     } else {
-        echo "<script type='text/javascript'>alert('Password incorrect');</script>";
+        echo "<script type='text/javascript'>console.log('Password incorrect);</script>";
     }
 } else {
-    echo "<script type='text/javascript'>alert('Username doesn't exist');</script>";
+    echo "<script type='text/javascript'>console.log('Username doesn't exist');</script>";
 }
 mysqli_close($conn);
 header('Location: ../index.php');
