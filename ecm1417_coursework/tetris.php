@@ -2,6 +2,9 @@
 <html>
 <head>
     <title>Tetris - Game</title>
+
+    <?php session_start(); ?>
+
     <style>
         ul.top-list {
             list-style-type: none;
@@ -187,6 +190,26 @@
             text-shadow: 1px 1px 1px black;
             font-size: 50px;
         }
+        #leaderboard-button {
+            margin: 20px;
+            background-color: white;
+            border: 2px solid #dd67db;
+            color: black;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 11px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition-duration: 0.4s;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+        #leaderboard-button:hover {
+            background-color: blue;
+            color: white;
+        }
 
     </style>
 </head>
@@ -240,6 +263,7 @@
         var nextBlockId;
         var coords = [4,20];
         var score;
+        var rowsCompleted;
         var gameActive = false;
         var paused = false;
         var grid = [...Array(10)].map(e => Array(20)); // grid[column][row]
@@ -276,19 +300,42 @@
             document.getElementById('play-button').remove();
             document.getElementsByClassName('game')[0].style.marginBottom = '76px';
 
-            score = 0;
-            if (gameActive) { // For when resetting the game
-                if (paused) { unPauseGame(); }
-                if (currentBlock != null) { currentBlock.remove(); }
-                currentBlock = null;
-                coords = [4,20];
-                removeExistingBlockPieces();
-            }
+            // if (gameActive) { // For when resetting the game
+            //     if (paused) { unPauseGame(); }
+            //     if (currentBlock != null) { currentBlock.remove(); }
+            //     currentBlock = null;
+            //     coords = [4,20];
+            //     removeExistingBlockPieces();
+            //     updateText('reset');
+            // }
+            // score = 0;
+            // rowsCompleted = 0;
+            restartGame();
             gameActive = true;
             nextBlock = assignNextBlock();
 
             document.dispatchEvent(newBlockEvent);
             timer = setInterval(function(e) {move('autoDown');}, 1000);
+        }
+
+        // Restarting the Game
+        function restartGame() {
+            if (paused) {
+                unPauseGame();
+            }
+            if (currentBlock != null) {
+                currentBlock.remove();
+                currentBlock = null;
+            }
+            let gos = document.getElementById('game-over-screen');
+            if (gos) {
+                gos.remove();
+            }
+            coords = [4,20];
+            removeExistingBlockPieces();
+            updateText('reset');
+            score = 0;
+            rowsCompleted = 0;
         }
 
         // Next Block Event Handler
@@ -409,6 +456,7 @@
             currentBlock.style.left = (10+(coords[0]*30)) + 'px';
             document.getElementById('game').appendChild(currentBlock);
             currentBlockId = nextBlockId;
+            updateText('score');
         }
 
         // Move the Block
@@ -492,6 +540,29 @@
                         block.setAttribute('class', newClass);
                     }
                 }
+            }
+            updateText('rows');
+        }
+
+        // Update Score or Rows
+        function updateText(textToEdit) {
+            var textObject;
+            switch (textToEdit) {
+                case 'rows':
+                    rowsCompleted += 1;
+                    textObject = document.getElementById('rows-completed');
+                    textObject.innerHTML = 'Rows: '+rowsCompleted;
+                    break;
+                case 'score':
+                    score +=1;
+                    textObject = document.getElementById('score');
+                    textObject.innerHTML = 'Score: '+score;
+                    break;
+                case 'reset':
+                    textObject = document.getElementById('rows-completed');
+                    textObject.innerHTML = 'Rows: 0';
+                    textObject = document.getElementById('score');
+                    textObject.innerHTML = 'Score: 0';
             }
         }
 
@@ -590,6 +661,7 @@
                 pauseBlock = currentBlock;
                 currentBlock = null;
                 clearInterval(timer);
+                time = null;
 
                 // document.getElementsByClassName("pause-menu")[0].style.visibility=null;
                 var menu = document.createElement('div');
@@ -639,9 +711,46 @@
         // End of Game
         function gameOver() {
             clearInterval(timer);
-            alert("game over");
+            timer = null;
             gameActive = false;
-            currentBlock = null;
+            if ('<%Session["loggedin"] %>') {
+                console.log('loggedin');
+                let url = 'http://ml-lab-4d78f073-aa49-4f0e-bce2-31e5254052c7.ukwest.cloudapp.azure.com:57183/ecm1417_coursework/leaderboard.php';
+                let data = 'score='+score;
+                const xhr = new XMLHttpRequest();
+                // xhr.onload = function() {
+                //     console.log(this.responseText);
+                // }
+                xhr.open("POST", "leaderboard.php");
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhr.send(data);
+            } else {
+                console.log('not loggedin');
+            }
+
+            var menu = document.createElement('div');
+            menu.setAttribute('class', 'pause-menu');
+            menu.setAttribute('id', 'game-over-screen');
+            document.getElementsByClassName('main')[0].appendChild(menu);
+
+            var text = document.createElement('h1');
+            text.setAttribute('class', 'pause-title');
+            menu.appendChild(text);
+            text.innerText = 'Game Over';
+
+            var restartButton = document.createElement('button');
+            restartButton.setAttribute('id','play-button');
+            restartButton.innerText = 'Restart Game';
+            restartButton.setAttribute('onclick', 'startGame()');
+            menu.appendChild(restartButton);
+
+            var leaderboardButton = document.createElement('button');
+            leaderboardButton.setAttribute('id','leaderboard-button');
+            leaderboardButton.innerText = 'Leaderboard';
+            leaderboardButton.onclick = function() {
+                location.replace("leaderboard.php");
+            };
+            menu.appendChild(leaderboardButton);
         }
     </script>
 </body>

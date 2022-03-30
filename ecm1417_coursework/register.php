@@ -2,68 +2,97 @@
 <html>
 <head>
     <title>Tetris - Register</title>
+
+    <!-- <?php
+        // if( isset($_POST['display'])) {
+        //     if ($_POST['display'] == "yes") {
+        //         $display_val = 1;
+        //     } else {
+        //         $display_val = 0;
+        //     }
+        // require "res/connect.php";
+        //     $sql = "INSERT INTO Users (username, firstName, lastName, Password, Display) VALUES ('";
+        //         $sql .= $_POST['uname'];
+        //         $sql .= "', '";
+        //         $sql .= $_POST['fname'];
+        //         $sql .= "', '";
+        //         $sql .= $_POST['lname'];
+        //         $sql .= "', '";
+        //         $sql .= $_POST['pword'];
+        //         $sql .= "', '";
+        //         $sql .= $display_val;
+        //         $sql .= "');";
+        //     if (mysqli_query($conn, $sql)) {
+        //         echo "New user added successfully";
+        //     } else {
+        //         echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+        //     }
+        // }
+        // mysqli_close($conn);
+    ?> -->
+
     <style>
-    ul {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        background-color: blue;
-        position: fixed;
-        top: 0;
-        width: 100%;
-    }
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: blue;
+            position: fixed;
+            top: 0;
+            width: 100%;
+        }
 
-    li a {
-        display: block;
-        color: white;
-        text-align: center;
-        padding: 14px 16px;
-        text-decoration: none;
-        font-family: Arial;
-        font-weight: bold;
-        font-size: 12px;
-    }
+        li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-family: Arial;
+            font-weight: bold;
+            font-size: 12px;
+        }
 
-    li a:hover:not(.active) {
-        background-color: #111;
-    }
+        li a:hover:not(.active) {
+            background-color: #111;
+        }
 
-    a.active {
-        background-color: #04AA6D;
-    }
+        a.active {
+            background-color: #04AA6D;
+        }
 
-    div.main {
-        background-image: url("res/tetris.png");
-        width: 100%;
-        height: 900px;
-        background-repeat: no-repeat;
-        background-position: center center;
-        background-attachment: fixed;
-        background-size: 95% auto;
-        overflow: auto;
-    }
+        div.main {
+            background-image: url("res/tetris.png");
+            width: 100%;
+            height: 900px;
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-attachment: fixed;
+            background-size: 95% auto;
+            overflow: auto;
+        }
 
-    .reg-form {
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 200px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        width: 40%;
-        padding: 10px;
-        background-color: #c7c7c7;
-        box-shadow: 5px 5px 10px;
-    }
+        .reg-form {
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 40%;
+            padding: 10px;
+            background-color: #c7c7c7;
+            box-shadow: 5px 5px 10px;
+        }
 
-    #reg-title {
-        color: white;
-        text-align: center;
-        text-shadow: 1px 1px 1px black;
-        font-size: 50px;
-    }
+        #reg-title {
+            color: white;
+            text-align: center;
+            text-shadow: 1px 1px 1px black;
+            font-size: 50px;
+        }
     </style>
 </head>
 <body>

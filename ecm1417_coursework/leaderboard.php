@@ -2,6 +2,25 @@
 <html>
 <head>
     <title>Tetris - Leaderboard</title>
+
+    <?php
+        session_start();
+        if( isset($_POST['score'])) {
+            require "res/connect.php";
+                $sql = "INSERT INTO Scores (Username, Score) VALUES ('";
+                    $sql .= $_SESSION['username'];
+                    $sql .= "', '";
+                    $sql .= $_POST['score'];
+                    $sql .= "');";
+                if (mysqli_query($conn, $sql)) {
+                    echo "New score added successfully";
+                } else {
+                    echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+                }
+        }
+        mysqli_close($conn);
+    ?>
+
     <style>
         ul {
             list-style-type: none;
@@ -32,7 +51,7 @@
         div.main {
             background-image: url("res/tetris.png");
             width: 100%;
-            height: 500px;
+            height: auto;
             background-repeat: no-repeat;
             background-position: center center;
             background-attachment: fixed;
@@ -43,6 +62,7 @@
             margin-left: auto;
             margin-right: auto;
             margin-top: 200px;
+            margin-bottom: 76px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -86,13 +106,21 @@
                 </tr>";
 
                 if (mysqli_num_rows($result) > 0) {
+                    $i = 0;
                     while ($row = mysqli_fetch_array($result)) {
                         if ($row['Display'] == 1) {
-                            echo "<tr>";
-                            echo "<td>" . $row['Username'] . "</td>";
-                            echo "<td>" . $row['Score'] . "</td>";
-                            echo "</tr>";
+                            $scoresArr[$i] = $row['Score'];
+                            $usernameArr[$i] = $row['Username'];
+                            $i++;
                         }
+                    }
+                    arsort($scoresArr);
+                    $arrlength = count($scoresArr);
+                    foreach ($scoresArr as $index => $scoreValue) {
+                        echo "<tr>";
+                        echo "<td>" . $usernameArr[$index] . "</td>";
+                        echo "<td>" . $scoreValue . "</td>";
+                        echo "</tr>";
                     }
                 }
 
