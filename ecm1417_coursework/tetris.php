@@ -230,9 +230,6 @@
         > Rotation
         > Score
         > End of Game
-        > Option to Reset Game
-        > > removeExistingBlockPieces() function
-        > Music
         */
 
         // Globals
@@ -245,7 +242,7 @@
         var score;
         var gameActive = false;
         var paused = false;
-        var grid = [...Array(10)].map(e => Array(20));
+        var grid = [...Array(10)].map(e => Array(20)); // grid[column][row]
         var shapes = {
             "L": [ [1,1],[2,1],[3,1],[3,2] ],
             "Z": [ [1,2],[2,2],[2,1],[3,1] ],
@@ -256,6 +253,7 @@
             "J": [ [1,1],[1,2],[2,1],[3,1] ]
         };
         var newBlockEvent = new CustomEvent('nextBlock');
+        var timer;
         var music = new Audio('res/tetris_music.mp3');
         music.play();
         music.loop = true;
@@ -284,13 +282,13 @@
                 if (currentBlock != null) { currentBlock.remove(); }
                 currentBlock = null;
                 coords = [4,20];
-                grid = [...Array(10)].map(e => Array(20));
                 removeExistingBlockPieces();
             }
             gameActive = true;
             nextBlock = assignNextBlock();
 
             document.dispatchEvent(newBlockEvent);
+            timer = window.setInterval(move('autodown'), 1000);
         }
 
         // Next Block Event Handler
@@ -317,6 +315,21 @@
                 }
             }
         });
+
+        // Remove Existing Block Pieces in Grid (for resetting the game)
+        function removeExistingBlockPieces() {
+            for (let row=0; row<20; row++) {
+                for (let column=0; column<10; column++) {
+                    if (grid[column][row] != null) {
+                        grid[column][row] = null;
+                        let block = document.getElementsByClassName('tetris-block-piece '+column+','+row)[0];
+                        if (block) {
+                            block.remove();
+                        }
+                    }
+                }
+            }
+        }
 
         // Select Random Shape
         function selectRandomBlock() {
