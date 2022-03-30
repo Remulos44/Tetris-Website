@@ -256,6 +256,9 @@
             "J": [ [1,1],[1,2],[2,1],[3,1] ]
         };
         var newBlockEvent = new CustomEvent('nextBlock');
+        var music = new Audio('res/tetris_music.mp3');
+        music.play();
+        music.loop = true;
 
         // Executes at Page Load
         function loadPage() {
