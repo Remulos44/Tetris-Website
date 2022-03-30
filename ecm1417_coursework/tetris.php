@@ -89,7 +89,7 @@
         #O { background-color: #ffff00; }
         #I { background-color: #00ffff; }
         #J { background-color: #0000ff; }
-        #score-div {
+        .score-div {
             background-color: #c7c7c7;
             box-shadow: 5px 5px 10px;
             width: 200px;
@@ -97,16 +97,14 @@
             padding: 10px;
             position: absolute;
             right: -230px;
-            top: 230px;
             outline: 1px black solid;
             outline-offset: -10px;
-            /* display: block; */
             display: flex;
             align-items: center;
             justify-content: center;
             flex-direction: column;
         }
-        #score-text {
+        .score-text {
             color: white;
             text-shadow: 1px 1px 1px black;
             font-size: 24px;
@@ -204,18 +202,21 @@
             <div id="next-block-div">
                 <h1 id="next-block-text">Next Block</h1>
             </div>
-            <div id="score-div">
-                <h1 id="score-text">Score: </h1>
+            <div class="score-div" style='top: 230px;'>
+                <h1 class="score-text" id="score">Score: 0</h1>
+            </div>
+            <div class="score-div" style='top: 310px;'>
+                <h1 class="score-text" id="rows-completed">Rows: 0</h1>
             </div>
             <div id="instructions-div">
                 <h1 id="score-text">Instructions:</h1>
                 <ul id="instructions-text">
-                    <li><strong>Left Arrow</strong> -> Move Left</li><br>
-                    <li><strong>Right Arrow</strong> -> Move Right</li><br>
-                    <li><strong>Up Arrow</strong> -> Rotate (WIP)</li><br>
-                    <li><strong>Down Arrow</strong> -> Move Down</li><br>
-                    <li><strong>Space</strong> -> Instantly Place Block</li><br>
-                    <li><strong>Esc</strong> -> Pause</li>
+                    <li><strong>Left Arrow</strong> > Move Left</li><br>
+                    <li><strong>Right Arrow</strong> > Move Right</li><br>
+                    <li><strong>Up Arrow</strong> > Rotate (WIP)</li><br>
+                    <li><strong>Down Arrow</strong> > Move Down</li><br>
+                    <li><strong>Space</strong> > Instantly Place Block</li><br>
+                    <li><strong>Esc</strong> > Pause</li>
                 </ul>
             </div>
         </div>
