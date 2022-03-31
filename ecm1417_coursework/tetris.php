@@ -253,7 +253,7 @@
                 <ul id="instructions-text">
                     <li><strong>Left Arrow</strong> > Move Left</li><br>
                     <li><strong>Right Arrow</strong> > Move Right</li><br>
-                    <li><strong>Up Arrow</strong> > Rotate (WIP)</li><br>
+                    <li><strong>Up Arrow</strong> > Rotate</li><br>
                     <li><strong>Down Arrow</strong> > Move Down</li><br>
                     <li><strong>Space</strong> > Instantly Place Block</li><br>
                     <li><strong>Esc</strong> > Pause</li>
