@@ -3,34 +3,6 @@
 <head>
     <title>Tetris - Register</title>
 
-    <!-- <?php
-        // if( isset($_POST['display'])) {
-        //     if ($_POST['display'] == "yes") {
-        //         $display_val = 1;
-        //     } else {
-        //         $display_val = 0;
-        //     }
-        // require "res/connect.php";
-        //     $sql = "INSERT INTO Users (username, firstName, lastName, Password, Display) VALUES ('";
-        //         $sql .= $_POST['uname'];
-        //         $sql .= "', '";
-        //         $sql .= $_POST['fname'];
-        //         $sql .= "', '";
-        //         $sql .= $_POST['lname'];
-        //         $sql .= "', '";
-        //         $sql .= $_POST['pword'];
-        //         $sql .= "', '";
-        //         $sql .= $display_val;
-        //         $sql .= "');";
-        //     if (mysqli_query($conn, $sql)) {
-        //         echo "New user added successfully";
-        //     } else {
-        //         echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-        //     }
-        // }
-        // mysqli_close($conn);
-    ?> -->
-
     <style>
         ul {
             list-style-type: none;

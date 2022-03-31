@@ -3,7 +3,26 @@
 <head>
     <title>Tetris - Game</title>
 
-    <?php session_start(); ?>
+    <?php
+    session_start();
+    if ( isset($_SESSION['loggedin']) ) {
+        echo "
+        <script>
+            sessionStorage.setItem('loggedIn', true);
+            console.log('logged in: '+sessionStorage.getItem('loggedIn'));
+        </script>
+        ";
+    } else {
+        echo "
+        <script>
+            if (sessionStorage.getItem('loggedIn')) {
+                sessionStorage.clear();
+            }
+            console.log('not logged in: '+sessionStorage.getItem('loggedIn'));
+        </script>
+        ";
+    }
+    ?>
 
     <style>
         ul.top-list {
@@ -712,20 +731,6 @@
             clearInterval(timer);
             timer = null;
             gameActive = false;
-            if ('<%Session["loggedin"] %>') {
-                console.log('loggedin');
-                let url = 'http://ml-lab-4d78f073-aa49-4f0e-bce2-31e5254052c7.ukwest.cloudapp.azure.com:57183/ecm1417_coursework/leaderboard.php';
-                let data = 'score='+score;
-                const xhr = new XMLHttpRequest();
-                // xhr.onload = function() {
-                //     console.log(this.responseText);
-                // }
-                xhr.open("POST", "leaderboard.php");
-                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                xhr.send(data);
-            } else {
-                console.log('not loggedin');
-            }
 
             var menu = document.createElement('div');
             menu.setAttribute('class', 'pause-menu');
@@ -737,19 +742,68 @@
             menu.appendChild(text);
             text.innerText = 'Game Over';
 
+            var scoreText = document.createElement('p');
+            scoreText.setAttribute('class', 'score-text');
+            // scoreText.style.margin = '10px';
+            menu.appendChild(scoreText);
+            scoreText.innerText = 'Score: '+score+'\nRows: '+rowsCompleted;
+
+            // var scoreTextRows = document.createElement('p');
+            // scoreTextRows.setAttribute('class', 'score-text');
+            // scoreTextRows.style.marginBottom = '10px';
+            // menu.appendChild(scoreTextRows);
+            // scoreTextRows.innerText = 'Rows: '+rowsCompleted+' (not recorded)';
+
             var restartButton = document.createElement('button');
             restartButton.setAttribute('id','play-button');
             restartButton.innerText = 'Restart Game';
             restartButton.setAttribute('onclick', 'startGame()');
             menu.appendChild(restartButton);
 
-            var leaderboardButton = document.createElement('button');
-            leaderboardButton.setAttribute('id','leaderboard-button');
-            leaderboardButton.innerText = 'Leaderboard';
-            leaderboardButton.onclick = function() {
-                location.replace("leaderboard.php");
-            };
-            menu.appendChild(leaderboardButton);
+            // if ('<%Session["loggedin"] %>') {
+            if (sessionStorage.getItem('loggedIn')) {
+                console.log('loggedin');
+                let url = 'leaderboard.php';
+                let data = 'score='+score;
+                const xhr = new XMLHttpRequest();
+                xhr.open("POST", url);
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhr.send(data);
+
+                var leaderboardButton = document.createElement('button');
+                leaderboardButton.setAttribute('id','leaderboard-button');
+                leaderboardButton.innerText = 'Leaderboard';
+                leaderboardButton.onclick = function() {
+                    location.replace("leaderboard.php");
+                };
+                menu.appendChild(leaderboardButton);
+            } else {
+                console.log('not loggedin');
+                let url = 'index.php';
+                let data = 'score='+score;
+                const xhr = new XMLHttpRequest();
+                xhr.open("POST", url);
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhr.send(data);
+
+                var registerButton = document.createElement('button');
+                registerButton.setAttribute('id','leaderboard-button');
+                registerButton.innerText = 'Register';
+                registerButton.onclick = function() {
+                    location.replace("register.php");
+                };
+                menu.appendChild(registerButton);
+
+                var logInButton = document.createElement('button');
+                logInButton.setAttribute('id','leaderboard-button');
+                logInButton.style.right = '60px';
+                logInButton.innerText = 'Log-In';
+                logInButton.onclick = function() {
+                    location.replace("index.php");
+                };
+                menu.appendChild(logInButton);
+                alert('Please log-in / register to save your score to the leaderboard.');
+            }
         }
     </script>
 </body>

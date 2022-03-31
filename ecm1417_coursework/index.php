@@ -3,10 +3,9 @@
 <head>
     <title>Tetris - Home</title>
 
-    <?php session_start(); ?>
-
-    <!-- Insert new User into Database -->
+    <!-- Insert new User into Database & Log In-->
     <?php
+        session_start();
         if( isset($_POST['fname']) && isset($_POST['lname']) && isset($_POST['uname']) && isset($_POST['pword']) && isset($_POST['display'])) {
             if ($_POST['display'] == "yes") {
                 $display_val = 1;
@@ -30,34 +29,36 @@
             } else {
                 echo "Error: " . $sql . "<br>" . mysqli_error($conn);
             }
-        }
-        mysqli_close($conn);
-    ?>
+            mysqli_close($conn);
 
-    <!-- <?php
-        // if( isset($_POST['uname']) && isset($_POST['pword']) ) {
-        //     $postdata = http_build_query(
-        //         array(
-        //             'log-uname' => $_POST['uname'],
-        //             'log-pword' => $_POST['pword']
-        //         )
-        //     );
-        //     $opts = array('http' =>
-        //         array(
-        //             'method' => 'POST',
-        //             'header' => 'Content-type: application/x-www-form-urlencoded',
-        //             'content' => $postdata
-        //         )
-        //     );
-        //     $context = stream_context_create($opts);
-        //     $result = file_get_contents('res/auth.php', false, $context);
-        //     echo "<script type='text/javascript'>console.log(".$result.");</script>";
-        //     echo "\n--";
-        //     echo "\n<script type='text/javascript'>console.log(".$result.");</script>";
-        //     if ($_SESSION['loggedin']) { echo "\nLogged in"; } else { echo "\nNot Logged In"; }
-        //     header("Refresh:0");
-        // }
-    ?> -->
+            // Log In
+            session_regenerate_id();
+            $_SESSION['loggedin'] = true;
+            $_SESSION['username'] = $_POST['uname'];
+            $_SESSION['display'] = $_POST['display'];
+            $_SESSION['fName'] = $_POST['fname'];
+        }
+
+        if( isset($_POST['score']) ) {
+            $_SESSION['score'] = $_POST['score'];
+        }
+
+        if (isset($_SESSION['loggedin'])) {
+            if( isset($_SESSION['score']) ) {
+                echo "
+                <script type='text/JavaScript'>
+                    let url = 'leaderboard.php';
+                    let data = 'score='+".$_SESSION['score'].";
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('POST', url);
+                    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                    xhr.send(data);
+                </script>
+                ";
+                unset($_SESSION['score']);
+            }
+        }
+    ?>
 
     <style>
         ul {

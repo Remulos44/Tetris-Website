@@ -4,7 +4,6 @@ require "connect.php";
 if (!isset($_POST['log-uname']) && !isset($_POST['log-pword'])) {
     exit("Please fill in both the Username and Password");
 }
-echo "<script type='text/javascript'>console.log('TESTING');</script>";
 $sql = "SELECT Password, Display, firstName FROM Users WHERE Username='".$_POST['log-uname']."' LIMIT 1;";
 $result = mysqli_query($conn, $sql);
 
