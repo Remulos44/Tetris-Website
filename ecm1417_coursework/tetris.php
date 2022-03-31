@@ -9,7 +9,6 @@
         echo "
         <script>
             sessionStorage.setItem('loggedIn', true);
-            console.log('logged in: '+sessionStorage.getItem('loggedIn'));
         </script>
         ";
     } else {
@@ -18,7 +17,6 @@
             if (sessionStorage.getItem('loggedIn')) {
                 sessionStorage.clear();
             }
-            console.log('not logged in: '+sessionStorage.getItem('loggedIn'));
         </script>
         ";
     }
@@ -270,7 +268,7 @@
         /*
         TODO
         > Rotation
-        > gameOver() while not logged in
+        > > Consider newly rotated blocks in collision
         */
 
         // Globals
@@ -280,19 +278,55 @@
         var currentBlockId;
         var nextBlockId;
         var coords = [4,20];
+        var rotation;
         var score;
         var rowsCompleted;
         var gameActive = false;
         var paused = false;
         var grid = [...Array(10)].map(e => Array(20)); // grid[column][row]
         var shapes = {
-            "L": [ [1,1],[2,1],[3,1],[3,2] ],
-            "Z": [ [1,2],[2,2],[2,1],[3,1] ],
-            "S": [ [1,1],[2,1],[2,2],[3,2] ],
-            "T": [ [1,1],[2,1],[2,2],[3,1] ],
-            "O": [ [1,1],[1,2],[2,1],[2,2] ],
-            "I": [ [1,1],[1,2],[1,3],[1,4] ],
-            "J": [ [1,1],[1,2],[2,1],[3,1] ]
+            "L": [
+                [ [1,2],[2,2],[3,2],[3,3] ], // 0 Degrees
+                [ [2,1],[2,2],[2,3],[3,1] ], // 90 Degrees Clockwise
+                [ [1,1],[1,2],[2,2],[3,2] ], // 180 Degrees
+                [ [1,3],[2,3],[2,2],[2,1] ]  // 270 Degrees Clockwise
+            ],
+            "Z": [
+                [ [1,3],[2,3],[2,2],[3,2] ], // 0 Degrees
+                [ [2,1],[2,2],[3,2],[3,3] ], // 90 Degrees Clockwise
+                [ [1,2],[2,2],[2,1],[3,1] ], // 180 Degrees
+                [ [1,1],[1,2],[2,2],[2,3] ]  // 270 Degrees Clockwise
+            ],
+            "S": [
+                [ [1,2],[2,2],[2,3],[3,3] ], // 0 Degrees
+                [ [2,2],[2,3],[3,1],[3,2] ], // 90 Degrees Clockwise
+                [ [1,1],[2,1],[2,2],[3,2] ], // 180 Degrees
+                [ [1,2],[1,3],[2,2],[2,1] ]  // 270 Degrees Clockwise
+            ],
+            "T": [
+                [ [1,2],[2,2],[2,3],[3,2] ], // 0 Degrees
+                [ [2,1],[2,2],[2,3],[3,2] ], // 90 Degrees Clockwise
+                [ [1,2],[2,1],[2,2],[3,2] ], // 180 Degrees
+                [ [1,2],[2,1],[2,2],[2,3] ]  // 270 Degrees Clockwise
+            ],
+            "O": [
+                [ [1,1],[1,2],[2,1],[2,2] ], // 0 Degrees
+                [ [1,1],[1,2],[2,1],[2,2] ], // 90 Degrees Clockwise
+                [ [1,1],[1,2],[2,1],[2,2] ], // 180 Degrees
+                [ [1,1],[1,2],[2,1],[2,2] ]  // 270 Degrees Clockwise
+            ],
+            "I": [
+                [ [1,3],[2,3],[3,3],[4,3] ], // 0 Degrees
+                [ [3,1],[3,2],[3,3],[3,4] ], // 90 Degrees Clockwise
+                [ [1,2],[2,2],[3,2],[4,2] ], // 180 Degrees
+                [ [2,1],[2,2],[2,3],[2,4] ]  // 270 Degrees Clockwise
+            ],
+            "J": [
+                [ [1,2],[1,3],[2,2],[3,2] ], // 0 Degrees
+                [ [2,1],[2,2],[2,3],[3,3] ], // 90 Degrees Clockwise
+                [ [1,2],[2,2],[3,1],[3,2] ], // 180 Degrees
+                [ [1,1],[2,1],[2,2],[2,3] ]  // 270 Degrees Clockwise
+            ]
         };
         var newBlockEvent = new CustomEvent('nextBlock');
         var timer;
@@ -358,6 +392,7 @@
 
         // Next Block Event Handler
         document.addEventListener('nextBlock', function(e) {
+            rotation = 0;
             cloneNextToCurrent();
             nextBlock = assignNextBlock();
         });
@@ -369,7 +404,7 @@
                     case 37: move("left")   ; break;
                     case 39: move("right")  ; break;
                     case 40: move("down")   ; break;
-                    case 38: alert("rotate (WIP)"); break;
+                    case 38: rotateBlock()  ; break;
                     case 32: instantPlace() ; break;
                     case 27:
                         if (paused) {
@@ -380,6 +415,28 @@
                 }
             }
         });
+
+        // Function to Rotate Block
+        function rotateBlock() {
+            rotation ++;
+            if (rotation > 3) {
+                rotation = 0;
+            }
+            // New block pieces
+            // var adjust = checkBounds();
+            // coords = [coords[0]-adjust[0]+adjust[1]][coords[1]-adjust[2]+adjust[3]];
+            if (!checkCollision('self')) {
+                rotation --;
+                if (rotation < 0) {
+                    rotation = 3;
+                }
+            } else {
+                while(currentBlock.firstChild) {
+                    currentBlock.removeChild(currentBlock.firstChild);
+                }
+                generateBlock(currentBlock, currentBlockId, rotation);
+            }
+        }
 
         // Remove Existing Block Pieces in Grid (for resetting the game)
         function removeExistingBlockPieces() {
@@ -425,13 +482,13 @@
             document.getElementById('next-block-div').appendChild(tetrisBlockNext);
 
             // Create the tetris block inside container
-            generateBlock(tetrisBlockNext, nextBlockId);
+            generateBlock(tetrisBlockNext, nextBlockId, 0);
 
             return tetrisBlockNext;
         }
 
         // Generate Block
-        function generateBlock(parent, blockId) {
+        function generateBlock(parent, blockId, rotationToUse) {
             for (let i=0; i<4; i++) {
                 // Create blockPiece, assign class & ID
                 var blockPiece = document.createElement('div');
@@ -439,9 +496,9 @@
                 blockPiece.setAttribute('id', blockId);
 
                 // Assign Position of blockPiece
-                var leftPosition = ((shapes[blockId][i][0] - 1)*30) + "px";
+                var leftPosition = ((shapes[blockId][rotationToUse][i][0] - 1)*30) + "px";
                 blockPiece.style.left = leftPosition;
-                var bottomPosition = ((shapes[blockId][i][1] - 1)*30) + "px";
+                var bottomPosition = ((shapes[blockId][rotationToUse][i][1] - 1)*30) + "px";
                 blockPiece.style.bottom = bottomPosition;
 
                 // Append blockPiece to parent
@@ -454,28 +511,99 @@
             currentBlock = nextBlock.cloneNode(true);
             currentBlock.setAttribute('class', 'tetris-block-main');
 
+            // let adjust = checkBounds();
             var tempCoords = [];
-            var a = 0;
-            var b;
+            var adjustX = 0;
+            var temp;
             for (let i=0; i<4; i++) {
                 for (let j=0; j<2; j++) {
-                    tempCoords[j] = coords[j] + (shapes[nextBlockId][i][j] - 1);
+                    tempCoords[j] = coords[j] + (shapes[nextBlockId][rotation][i][j] - 1);
                 }
-                // Check Horizontal
-                if (tempCoords[0] >=10) {
-                        b = tempCoords[0]-9;
-                        if (b > a) {
-                            a = b;
-                        }
+                // Check Horizontal Right
+                if (tempCoords[0] > 9) {
+                    temp = tempCoords[0] - 9;
+                    if (temp > adjustX) {
+                        adjustX = temp;
                     }
+                    adjustX *= -1;
+                }
+                if (tempCoords[0] < 0) {
+                    temp = 0 - tempCoords[0];
+                    if (temp > adjustX) {
+                        adjustX = temp;
+                    }
+                }
             }
 
-            coords = [coords[0]-a,20];
+            coords = [coords[0]+adjustX,20];
             currentBlock.style.left = (10+(coords[0]*30)) + 'px';
             document.getElementById('game').appendChild(currentBlock);
             currentBlockId = nextBlockId;
             updateText('score');
         }
+
+        // Check Bounds of Block after Rotation
+        // function checkBounds() {
+        //     var tempCoords = [];
+        //     var fromRight = 0;
+        //     var fromRightCheck;
+        //     var fromLeft = 0;
+        //     var fromLeftCheck;
+        //     var fromTop = 10;
+        //     var fromTopCheck;
+        //     var fromBottom = 0;
+        //     var fromBottomCheck;
+        //     for (let i=0; i<4; i++) {
+        //         for (let j=0; j<2; j++) {
+        //             tempCoords[j] = coords[j] + (shapes[nextBlockId][rotation][i][j] - 1);
+        //         }
+        //         // Check Horizontal Right
+        //         if (tempCoords[0] > 9) {
+        //             fromRightCheck = tempCoords[0] - 9;
+        //             if (fromRightCheck > fromRight) {
+        //                 fromRight = fromRightCheck;
+        //             }
+        //         }
+        //
+        //         // Check Horizontal Left
+        //         if (tempCoords[0] < 0) {
+        //             fromLeftCheck = 0 - tempCoords[0];
+        //             if (fromLeftCheck > fromLeft) {
+        //                 fromLeft = fromLeftCheck;
+        //             }
+        //         }
+        //
+        //         // Check Vertical Top
+        //         if (tempCoords[1] > 20) {
+        //             fromTopCheck = tempCoords[1] - 20;
+        //             if (fromTopCheck < fromTop) {
+        //                 fromTop = fromTopCheck;
+        //             }
+        //         }
+        //
+        //         // Check Vertical Bottom
+        //         if (tempCoords[1] < 0) {
+        //             fromBottomCheck = 0 - tempCoords[1];
+        //             if (fromBottomCheck > fromBottom) {
+        //                 fromBottom = fromBottomCheck;
+        //             }
+        //         } else {
+        //             let up = 0;
+        //             let safe = false;
+        //             while (!safe) {
+        //                 if (grid[tempCoords[0]][tempCoords[1]+up] != null) {
+        //                     up++;
+        //                 } else {
+        //                     safe = true;
+        //                 }
+        //             }
+        //             if (up > fromBottom) {
+        //                 fromBottom = up;
+        //             }
+        //         }
+        //     }
+        //     return [fromRight, fromLeft, fromTop, fromBottom];
+        // }
 
         // Move the Block
         function move(direction) {
@@ -619,11 +747,25 @@
                 case 'right'   : left =  1; down =  0; break;
                 case 'down'    : left =  0; down = -1; break;
                 case 'autoDown': left =  0; down = -1; break;
+                case 'self'    : left =  0; down =  0; break;
             }
             for (let i=0; i<4; i++) {
                 for (let j=0; j<2; j++) {
-                    tempCoords[j] = coords[j] + (shapes[currentBlockId][i][j] - 1);
+                    tempCoords[j] = coords[j] + (shapes[currentBlockId][rotation][i][j] - 1);
                 }
+
+                // if (tempCoords[0] > 9 || tempCoords[1] < 0) {
+                //     noCollision = false;
+                //     break;
+                // }
+
+                // Check Horizontal
+                if (tempCoords[0]+left < 0 ||
+                    tempCoords[0]+left >=10) {
+                        noCollision = false;
+                        break;
+                    }
+
                 // Check Vertical
                 if (tempCoords[1] <= 20) {
                     if (grid[tempCoords[0]+left][tempCoords[1]+down] != null ||
@@ -632,12 +774,6 @@
                             break;
                         }
                 }
-                // Check Horizontal
-                if (tempCoords[0]+left < 0 ||
-                    tempCoords[0]+left >=10) {
-                        noCollision = false;
-                        break;
-                    }
             }
             return noCollision;
         }
@@ -647,7 +783,7 @@
             var tempCoords = [];
             for (let i=0; i<4; i++) {
                 for (let j=0; j<2; j++) {
-                    tempCoords[j] = coords[j] + (shapes[currentBlockId][i][j] - 1);
+                    tempCoords[j] = coords[j] + (shapes[currentBlockId][rotation][i][j] - 1);
                 }
                 if (tempCoords[1] > 19) {
                     gameOver();
@@ -744,15 +880,8 @@
 
             var scoreText = document.createElement('p');
             scoreText.setAttribute('class', 'score-text');
-            // scoreText.style.margin = '10px';
             menu.appendChild(scoreText);
             scoreText.innerText = 'Score: '+score+'\nRows: '+rowsCompleted;
-
-            // var scoreTextRows = document.createElement('p');
-            // scoreTextRows.setAttribute('class', 'score-text');
-            // scoreTextRows.style.marginBottom = '10px';
-            // menu.appendChild(scoreTextRows);
-            // scoreTextRows.innerText = 'Rows: '+rowsCompleted+' (not recorded)';
 
             var restartButton = document.createElement('button');
             restartButton.setAttribute('id','play-button');
@@ -760,9 +889,7 @@
             restartButton.setAttribute('onclick', 'startGame()');
             menu.appendChild(restartButton);
 
-            // if ('<%Session["loggedin"] %>') {
             if (sessionStorage.getItem('loggedIn')) {
-                console.log('loggedin');
                 let url = 'leaderboard.php';
                 let data = 'score='+score;
                 const xhr = new XMLHttpRequest();
@@ -778,7 +905,6 @@
                 };
                 menu.appendChild(leaderboardButton);
             } else {
-                console.log('not loggedin');
                 let url = 'index.php';
                 let data = 'score='+score;
                 const xhr = new XMLHttpRequest();
