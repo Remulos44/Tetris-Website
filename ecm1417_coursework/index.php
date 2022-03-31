@@ -153,8 +153,6 @@
             </li>
     </ul>
     <div class="main">
-        <!-- <div class="gap" style="height: 200px;"></div> -->
-
         <div id="logged-in" <?php if (isset($_SESSION['loggedin'])){?>style="display: flex"<?php }else{?>style="display:none"<?php } ?>>
             <h1 class="div-title">Welcome to Tetris</h1><br>
             <?php echo"<p>Welcome back ".$_SESSION['username']."!</p>" ?>

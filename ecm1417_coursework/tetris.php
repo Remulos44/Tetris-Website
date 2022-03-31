@@ -4,22 +4,22 @@
     <title>Tetris - Game</title>
 
     <?php
-    session_start();
-    if ( isset($_SESSION['loggedin']) ) {
-        echo "
-        <script>
-            sessionStorage.setItem('loggedIn', true);
-        </script>
-        ";
-    } else {
-        echo "
-        <script>
-            if (sessionStorage.getItem('loggedIn')) {
-                sessionStorage.clear();
-            }
-        </script>
-        ";
-    }
+        session_start();
+        if ( isset($_SESSION['loggedin']) ) {
+            echo "
+            <script>
+                sessionStorage.setItem('loggedIn', true);
+            </script>
+            ";
+        } else {
+            echo "
+            <script>
+                if (sessionStorage.getItem('loggedIn')) {
+                    sessionStorage.clear();
+                }
+            </script>
+            ";
+        }
     ?>
 
     <style>
@@ -177,7 +177,7 @@
             left: 65px;
             bottom: 20px;
         }
-        div.tetris-block-piece {
+        div.block {
             position: absolute;
             width: 30px;
             height: 30px;
@@ -444,7 +444,7 @@
                 for (let column=0; column<10; column++) {
                     if (grid[column][row] != null) {
                         grid[column][row] = null;
-                        let block = document.getElementsByClassName('tetris-block-piece '+column+','+row)[0];
+                        let block = document.getElementsByClassName('block '+column+','+row)[0];
                         if (block) {
                             block.remove();
                         }
@@ -492,7 +492,7 @@
             for (let i=0; i<4; i++) {
                 // Create blockPiece, assign class & ID
                 var blockPiece = document.createElement('div');
-                blockPiece.setAttribute('class', 'tetris-block-piece');
+                blockPiece.setAttribute('class', 'block');
                 blockPiece.setAttribute('id', blockId);
 
                 // Assign Position of blockPiece
@@ -666,7 +666,7 @@
             // Remove the Row
             for (let column=0; column<10; column++) {
                 grid[column][rowRemoved] = null;
-                let className = 'tetris-block-piece ' + column + ',' + rowRemoved;
+                let className = 'block ' + column + ',' + rowRemoved;
                 document.getElementsByClassName(className)[0].remove();
             }
 
@@ -676,13 +676,13 @@
                     if (grid[column][row] != null) {
                         grid[column][row-1] = grid[column][row];
                         grid[column][row] = null;
-                        let className = 'tetris-block-piece ' + column + ',' + row;
+                        let className = 'block ' + column + ',' + row;
                         let block = document.getElementsByClassName(className)[0];
                         let bottom = parseInt(block.style.bottom.match(/[0-9]+/));
                         let newBottom = bottom-30;
                         block.style.bottom = newBottom + 'px';
                         let newRowClass = row-1;
-                        let newClass = 'tetris-block-piece ' + column + ',' + newRowClass;
+                        let newClass = 'block ' + column + ',' + newRowClass;
                         block.setAttribute('class', newClass);
                     }
                 }
@@ -796,7 +796,7 @@
                     var block = document.createElement('div');
                     block.setAttribute('id', currentBlockId);
                     var location = tempCoords[0] + "," + tempCoords[1];
-                    block.setAttribute('class', 'tetris-block-piece '+location)
+                    block.setAttribute('class', 'block '+location)
                     left += tempCoords[0]*30;
                     bottom += tempCoords[1]*30;
                     block.style.left = left+'px';

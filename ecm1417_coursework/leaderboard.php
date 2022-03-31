@@ -82,6 +82,12 @@
         td {
             text-align: center;
         }
+        th {
+            background-color: blue;
+            color: white;
+            text-shadow: 1px 1px 1px black;
+            font-size: 24px;
+        }
     </style>
 </head>
 <body>
