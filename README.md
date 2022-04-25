@@ -1,6 +1,6 @@
-# ECM1417 Coursework
+# Tetris Website [ecm1417 Coursework]
 
-This is my ecm1410: Object-Oriented Programming coursework, where we were tasked with creating a Tetris website, along with a user account system and leaderboard functionality.
+This is my ecm1410: Web Development coursework, where we were tasked with creating a Tetris website, along with a user account system and leaderboard functionality.
 The game itself was programmed using Javascript, while the server tasks, such as saving scores or logging in, where made using PHP and SQL.
 HTML and CSS were used to design and style the website.
 
